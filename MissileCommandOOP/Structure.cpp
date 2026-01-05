@@ -1,9 +1,9 @@
 #include "Structure.h"
 
-Structure::Structure() : Destroyable(100)
+Structure::Structure(int spriteId) : Destroyable(100)
 {
 	this->rubbleSpriteId = Play::GetSpriteId("rubble");
-	this->structureSpriteId = -1; // invalid sprite unless set!
+	this->structureSpriteId = spriteId; // invalid sprite unless set!
 }
 
 Structure::~Structure()

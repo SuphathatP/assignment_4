@@ -1,7 +1,6 @@
 #include <cassert>
 #include "GameStateManager.h"
 #include "GameObject.h"
-#include "City.h"
 #include "MissileBase.h"
 #include "Missile.h"
 #include "Reticle.h"
@@ -155,7 +154,7 @@ void GameStateManager::NewGame()
 	for (size_t i = 0; i < 6; i++)
 	{
 		int offset = this->worldWidth / 7;
-		City* city = new City();
+		Structure* city = new Structure(Play::GetSpriteId("City"));
 		city->SetPosition(Play::Point2D(float(i) * offset + offset, groundLevel));
 		this->AddGameObject(city);
 	}

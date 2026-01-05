@@ -4,7 +4,7 @@
 class Structure : public Destroyable
 {
 public:
-	Structure();
+	Structure(int spriteId = -1);
 	~Structure();
 
 	void Draw() override;
