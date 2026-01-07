@@ -1,10 +1,7 @@
 #define PLAY_IMPLEMENTATION
 #include "Play.h"
+#include "constants.h"
 #include "GameStateManager.h"
-
-int DISPLAY_WIDTH = 240;
-int DISPLAY_HEIGHT = 160;
-int DISPLAY_SCALE = 4;
 
 GameStateManager state;
 
