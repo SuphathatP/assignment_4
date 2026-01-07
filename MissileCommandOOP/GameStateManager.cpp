@@ -150,11 +150,11 @@ void GameStateManager::NewGame()
 	Reticle* reticle = new Reticle();
 	reticle->SetPosition(Play::Input::GetMousePos());
 	this->AddGameObject(reticle);
-
+	const int cityId = Play::GetSpriteId("City");
 	for (size_t i = 0; i < 6; i++)
 	{
 		int offset = this->worldWidth / 7;
-		Structure* city = new Structure(Play::GetSpriteId("City"));
+		Structure* city = new Structure(cityId);
 		city->SetPosition(Play::Point2D(float(i) * offset + offset, groundLevel));
 		this->AddGameObject(city);
 	}

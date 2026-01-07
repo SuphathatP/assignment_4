@@ -2,6 +2,11 @@
 #include "GameStateManager.h"
 #include "Destroyable.h"
 
+struct Expl {
+	float currentRadius;
+	float maxRadius;
+};
+
 Explosion::Explosion(Play::Point2D position) :
 	hasExploded(false),
 	maxRadius(16.0f),
@@ -19,29 +24,21 @@ void Explosion::Simulate(float elapsedTime)
 	}
 
 	// simulate explosion for x seconds, then schedule for deletion.
-	const float expansionSpeed = ((maxRadius / 2.0f)) * elapsedTime * 12.0f;
+	const float expansionSpeed = maxRadius * 6.0f * elapsedTime;
 	currentRadius = std::fminf(this->currentRadius + expansionSpeed, maxRadius);
+
 	if (currentRadius == maxRadius)
 	{
 		this->ScheduleDelete();
 	}
-
-
 }
 
 void Explosion::Draw()
 {
-	const Play::Colour colours[4] = {
-		Play::cWhite,
-		Play::cRed,
-		Play::cBlue,
-		Play::cYellow
-	};
+	//this->alternateColour = (this->alternateColour + 1) % 8;
+	//int colourIndex = this->alternateColour / 2;
 
-	this->alternateColour = (this->alternateColour + 1) % 8;
-	int colourIndex = this->alternateColour / 2;
-
-	Play::DrawCircle(this->position, this->currentRadius, colours[colourIndex]);
+	//Play::DrawCircle(this->position, this->currentRadius, EXPLOTION_COLORS[colourIndex]);
 }
 
 void Explosion::Explode()

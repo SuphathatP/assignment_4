@@ -2,9 +2,9 @@
 #include "Play.h"
 #include "GameStateManager.h"
 
-int DISPLAY_WIDTH = 240;
-int DISPLAY_HEIGHT = 160;
-int DISPLAY_SCALE = 4;
+const int DISPLAY_WIDTH = 240;
+const int DISPLAY_HEIGHT = 160;
+const int DISPLAY_SCALE = 4;
 
 GameStateManager state;
 

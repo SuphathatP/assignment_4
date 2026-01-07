@@ -1,6 +1,13 @@
 #pragma once
 #include "Destroyable.h"
 
+enum MISSILE_STATE {
+	TRAVELING,
+	EXPLODING,
+	DEAD
+};
+
+
 class Missile : public Destroyable
 {
 public:
@@ -21,5 +28,12 @@ private:
 	float distanceTravelled;
 	int alternateColour;
 	float speed;
+	MISSILE_STATE state;
+	// explotion {
+	float currentRadius;
+	float maxRadius;
+	float expansionSpeed;
+	//float _dt;
+	// }
 };
 
