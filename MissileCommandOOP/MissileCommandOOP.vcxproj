@@ -192,6 +192,7 @@
   <ItemGroup>
     <ClCompile Include="Destroyable.cpp" />
     <ClCompile Include="Explosion.cpp" />
+    <ClCompile Include="game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameStateManager.cpp" />
     <ClCompile Include="MainGame.cpp">
@@ -209,6 +210,7 @@
     <ClInclude Include="constants.h" />
     <ClInclude Include="Destroyable.h" />
     <ClInclude Include="Explosion.h" />
+    <ClInclude Include="game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameStateManager.h" />
     <ClInclude Include="Missile.h" />

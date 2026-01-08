@@ -11,8 +11,8 @@ TYPE FN(T first, _Types... rest) { \
 	FN(first); \
 	FN(rest...); \
 };
-#endif // !RECURSIFY_FUNCTION
-#endif // !EXLUDE_RECURSIVE
+#endif  !RECURSIFY_FUNCTION
+#endif !EXLUDE_RECURSIVE
 
 // base element class for LinkedList
 template <typename T>
@@ -175,6 +175,14 @@ struct LinkedList {
 
 		do {
 			fn(curr);
+			curr = curr->next;
+		} while (curr != nullptr);
+	}
+	void forEach(std::function<void(T)> fn) {
+		Node<T>* curr = head;
+
+		do {
+			fn(curr->data);
 			curr = curr->next;
 		} while (curr != nullptr);
 	}
