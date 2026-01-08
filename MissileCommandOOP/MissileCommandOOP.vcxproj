@@ -204,6 +204,7 @@
     <ClCompile Include="Structure.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\lib\LinkedList.h" />
     <ClInclude Include="..\Play.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="Destroyable.h" />

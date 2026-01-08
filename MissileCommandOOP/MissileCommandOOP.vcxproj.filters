@@ -7,66 +7,78 @@
     <Filter Include="Header Files">
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="Header Files\lib">
+      <UniqueIdentifier>{ec86b62c-2b96-49eb-9632-8202d047209e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\old">
+      <UniqueIdentifier>{4f875b1e-71d8-4f3c-a82a-d838394cae16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\old">
+      <UniqueIdentifier>{640decdd-bee3-4275-82bf-891a5d594c6f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameStateManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Destroyable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Structure.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MissileBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Missile.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\old</Filter>
     </ClCompile>
     <ClCompile Include="Explosion.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\old</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files\old</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateManager.cpp">
+      <Filter>Source Files\old</Filter>
+    </ClCompile>
+    <ClCompile Include="Missile.cpp">
+      <Filter>Source Files\old</Filter>
+    </ClCompile>
+    <ClCompile Include="MissileBase.cpp">
+      <Filter>Source Files\old</Filter>
     </ClCompile>
     <ClCompile Include="Reticle.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\old</Filter>
+    </ClCompile>
+    <ClCompile Include="Structure.cpp">
+      <Filter>Source Files\old</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Play.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameStateManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Destroyable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Structure.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MissileBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Missile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Explosion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Reticle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="constants.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lib\LinkedList.h">
+      <Filter>Header Files\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Destroyable.h">
+      <Filter>Header Files\old</Filter>
+    </ClInclude>
+    <ClInclude Include="Explosion.h">
+      <Filter>Header Files\old</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files\old</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateManager.h">
+      <Filter>Header Files\old</Filter>
+    </ClInclude>
+    <ClInclude Include="Missile.h">
+      <Filter>Header Files\old</Filter>
+    </ClInclude>
+    <ClInclude Include="MissileBase.h">
+      <Filter>Header Files\old</Filter>
+    </ClInclude>
+    <ClInclude Include="Reticle.h">
+      <Filter>Header Files\old</Filter>
+    </ClInclude>
+    <ClInclude Include="Structure.h">
+      <Filter>Header Files\old</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
