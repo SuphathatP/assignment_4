@@ -41,8 +41,8 @@ void SpawnPlayerMissile(Vector2f target_pos){
 	}
 	if (best_index == -1) return;
 
-	// pushing in front is *generally* faster for linked lists, depends if they store the tail or not
-	playerMissiles.push_front(Missile(building_pos[best_index],target_pos));
+	// pushing in front is generally faster for linked lists (depends if they store the tail or not)
+	playerMissiles.push_front(Missile(building_pos[best_index], target_pos));
 	building_missiles[best_index]--;
 }
 

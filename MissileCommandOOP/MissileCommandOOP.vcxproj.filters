@@ -80,11 +80,11 @@
     <ClInclude Include="Structure.h">
       <Filter>Header Files\old</Filter>
     </ClInclude>
-    <ClInclude Include="..\Play.h">
-      <Filter>Header Files\lib</Filter>
-    </ClInclude>
     <ClInclude Include="game.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Play.h">
+      <Filter>Header Files\lib</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

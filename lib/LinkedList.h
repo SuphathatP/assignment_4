@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include <iostream>
 #include <functional>
 #include <cassert>
@@ -16,10 +15,10 @@ struct Node {
 template <typename T>
 struct LinkedList {
 	Node<T>* head;
-	Node<T>* tail;
+	//Node<T>* tail;
 
 	LinkedList() {
-		head = tail = nullptr;
+		head = nullptr;
 	}
 
 	void push_front(T item) {
@@ -32,15 +31,15 @@ struct LinkedList {
 		}
 	}
 
-	void push_back(T item) {
-		Node<T>* new_end = new Node<T>(item);
-		if (this->_init_if_no_head(new_end)) {
-			/*head = tail = new_end;
-			return;*/
-			tail->next = new_end;
-			tail = new_end;
-		}
-	}
+	//void push_back(T item) {
+	//	Node<T>* new_end = new Node<T>(item);
+	//	if (this->_init_if_no_head(new_end)) {
+	//		/*head = tail = new_end;
+	//		return;*/
+	//		tail->next = new_end;
+	//		tail = new_end;
+	//	}
+	//}
 #ifndef EXLUDE_RECURSIVE
 	template<typename ... _Types>
 	void push_front(T first, _Types... rest) {
@@ -48,15 +47,17 @@ struct LinkedList {
 		push_front(rest...);
 		push_front(first);
 	};
-	template<typename ... _Types>
-	void push_back(T first, _Types... rest) {
 
-		push_back(first);
-		push_back(rest...);
-	};
+	//template<typename ... _Types>
+	//void push_back(T first, _Types... rest) {
+
+	//	push_back(first);
+	//	push_back(rest...);
+	//};
+
 	template<typename ... _Types>
 	LinkedList(_Types... items) {
-		head = tail = nullptr;
+		head =  nullptr;
 		push_front(items...);
 	}
 #endif !EXLUDE_RECURSIVE
@@ -187,7 +188,7 @@ private:
 		if (head != nullptr)
 			return true;
 
-		head = tail = ele;
+		head = ele;
 		return false;
 	}
 };
