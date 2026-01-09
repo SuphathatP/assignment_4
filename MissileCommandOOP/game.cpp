@@ -17,15 +17,14 @@ void init() {
 	SPRITE_RUBBLE = Play::GetSpriteId("rubble");
 	SPRITE_CITY = Play::GetSpriteId("city");
 	SPRITE_BASE = Play::GetSpriteId("missile_base");
+
 	setupBuildings();
 }
 
-Missile::Missile(Vector2f origin, Vector2f target)
-	: pos(origin), origin(origin), target(target) {
-}
+Missile::Missile(Vector2f origin, Vector2f target): pos(origin), origin(origin), target(target) {}
 
 
-void SpawnPlayerMissile(Vector2f target_pos){
+void SpawnPlayerMissile(Vector2f target_pos) {
 	// squared distance is faster
 	float best_dist_sqrd = 1e9f;
 	int best_index = -1;
@@ -41,7 +40,7 @@ void SpawnPlayerMissile(Vector2f target_pos){
 	}
 	if (best_index == -1) return;
 
-	// pushing in front is generally faster for linked lists (depends if they store the tail or not)
+	// pushing in front is generally faster for linked lists (depends on if they store the tail or not)
 	playerMissiles.push_front(Missile(building_pos[best_index], target_pos));
 	building_missiles[best_index]--;
 }
@@ -62,7 +61,6 @@ void setupBuildings() {
 		building_pos[i] = Play::Point2D(offset * ((i - 3) + 1), GROUND_Y);
 		building_health[i] = 1; // weak
 	}
-
 }
  
 void drawBuildings() {
