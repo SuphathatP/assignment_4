@@ -41,6 +41,7 @@ void SpawnPlayerMissile(Vector2f target_pos){
 	}
 	if (best_index == -1) return;
 
+	// pushing in front is *generally* faster for linked lists, depends if they store the tail or not
 	playerMissiles.push_front(Missile(building_pos[best_index],target_pos));
 	building_missiles[best_index]--;
 }
@@ -63,7 +64,7 @@ void setupBuildings() {
 	}
 
 }
-
+ 
 void drawBuildings() {
 
 	for (int i = 0; i < 9; i++)
@@ -84,8 +85,8 @@ void draw() {
 		DrawLine(missile.origin, missile.pos, Play::cMagenta);
 	});
 	hostileMissiles.forEach([](Missile missile) {
-		DrawCircle(missile.target, 2, Play::cRed);
-		DrawLine(missile.origin, missile.pos, Play::cRed);
+		DrawCircle(missile.target, 2, Play::cYellow);
+		DrawLine(missile.origin, missile.pos, Play::cYellow);
 	});
 
 	drawBuildings();
