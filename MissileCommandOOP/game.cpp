@@ -73,8 +73,7 @@ void drawBuildings() {
 			return;
 		}
 
-		int sprite = (i < 3) ? SPRITE_BASE : SPRITE_CITY;
-		DrawSprite(sprite, building_pos[i], 0);
+		DrawSprite((i < 3) ? SPRITE_BASE : SPRITE_CITY, building_pos[i], 0);
 	}
 }
 
