@@ -26,6 +26,7 @@ struct Node {
 template <typename T>
 struct LinkedList {
 	Node<T>* head;
+	/*only here to make push_back faster, so if it becomes a bottlenack, remove it*/
 	Node<T>* tail;
 
 	LinkedList() {
@@ -132,7 +133,6 @@ struct LinkedList {
 			count++;
 		} while (curr != nullptr);
 	}
-	
 
 	size_t Length(){
 		if (head == nullptr)
@@ -160,15 +160,6 @@ struct LinkedList {
 		return count;
 	}
 
-	void print() {
-		if (head == nullptr) return;
-
-		Node<T>* curr = head;
-		do {
-			std::cout << curr->data << "\n";
-			curr = curr->next;
-		} while (curr != nullptr);
-	}
 
 	void forEach(std::function<void(Node<T>*)> fn) {
 		Node<T>* curr = head;
@@ -179,6 +170,7 @@ struct LinkedList {
 		} while (curr != nullptr);
 	}
 	void forEach(std::function<void(T)> fn) {
+		if (head == nullptr) return;
 		Node<T>* curr = head;
 
 		do {
@@ -186,6 +178,15 @@ struct LinkedList {
 			curr = curr->next;
 		} while (curr != nullptr);
 	}
+	//void print() {
+	//	if (head == nullptr) return;
+
+	//	Node<T>* curr = head;
+	//	do {
+	//		std::cout << curr->data << "\n";
+	//		curr = curr->next;
+	//	} while (curr != nullptr);
+	//}
 
 private:
 	inline bool _init_if_no_head(Node<T>* ele) {
