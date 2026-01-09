@@ -6,69 +6,74 @@ using namespace Play;
 // added and removed all the time
 
 struct GameObj {
-	Play::Vector2f pos;
+	Vector2f pos;
 	/*collition*/
 	//float radius;
 	//virtual void Draw() = 0;
 
-	GameObj(Play::Vector2f pos/*,float radius*/) : pos(pos)/*, radius(radius)*/{}
+	GameObj(Vector2f pos/*,float radius*/) : pos(pos)/*, radius(radius)*/{}
 	//GameObj() :pos({0,0}) {}
 };
 
 struct SpriteObj : public GameObj {
 	int spriteId;
-	void Draw() {
-		Play::DrawSprite(spriteId, pos, 0);
-	}
+	//void Draw() {
+	//	Play::DrawSprite(spriteId, pos, 0);
+	//}
 
-	SpriteObj(int spriteId, Play::Vector2f pos) 
+	SpriteObj(int spriteId, Vector2f pos) 
 		: spriteId(spriteId), GameObj(pos) { }
 };
 
-struct Missile : public GameObj {
-	int spriteId;
-	Play::Vector2f origin;
-	Play::Vector2f target;
-	bool isPlayerOwned;
+struct Missile {
+	Vector2f pos;
+	Vector2f origin;
+	Vector2f target;
 
-
-	//void Draw() {
-	//	DrawLine(origin, pos, cRed);
-	//	DrawCircle(target, radius, cBlue);
-	//}
-
-	Missile(Play::Vector2f pos, bool isPlayerOwned) :  GameObj(pos), isPlayerOwned(isPlayerOwned) {}
+	Missile(Vector2f origin, Vector2f target) 
+		: pos(origin), origin(origin), target(target) {
+	}
 };
 
-LinkedList<Missile> missiles;
 
-void drawMissliles() {
-	missiles.forEach([](Missile missile) {
-		Colour targetColor = missile.isPlayerOwned? cBlue: cRed;
-		if (!missile.isPlayerOwned) {
-			DrawLine(missile.origin, missile.pos, cRed);
+LinkedList<Missile> playerMissiles;
+LinkedList<Missile> hostileMissiles; // idk how to spell, ok?
+
+// base + city
+Vector2f building_pos[3+6];
+int buildingHealth[3+6];
+int buildingMissiles[3];
+
+void SpawnPlayerMissile(Vector2f target_pos){
+	// squared distance is faster
+	float best_dist_sqrd = 1e9f;
+	int best_index = -1;
+	for (int i = 0; i < 3; i++)
+	{
+		if (buildingHealth[i] <= 0 || buildingMissiles[i] <= 0)
+			continue;
+		float dist = (building_pos[i] - target_pos).LengthSqr();
+		if(dist<best_dist_sqrd){
+			best_dist_sqrd = dist;
+			best_index = i;
 		}
-		DrawCircle(missile.target, 2, targetColor);
-	});
+	}
 }
 
-/* 
-# alt:
-- no Missile.isPlayerOwned
-*/
-LinkedList<Missile> PlayerMissiles;
-LinkedList<Missile> EnemyMissiles;
-
-Vector2f Buildings[6+3];
 
 void setupBuildings() {
 	int offset = DISPLAY_WIDTH / 7;
-	for (size_t i = 0; i < 6; i++)
+	for (size_t i = 0; i < 3; i++)
 	{
-		Buildings[i] = Play::Point2D(float(i) * offset + offset, 16);
+		// city
+		building_pos[i] = Play::Point2D(float(i) * offset + offset, 16);
+		buildingHealth[i] = 50;
+		buildingMissiles[i] = 10;
 	}
-	for (size_t i = 6; i < 9; i++) {
-		Buildings[i]=Play::Point2D((offset * (i-6) * 2.0f) + offset * 1.4f, 16);
+	for (size_t i = 3; i < 9; i++) {
+		// base
+		building_pos[i] = Play::Point2D((offset * (i-6) * 2.0f) + offset * 1.4f, 16);
+		buildingHealth[i] = 100;
 	}
 	//	for (size_t i = 0; i < 3; i++)
 	//{
@@ -76,7 +81,22 @@ void setupBuildings() {
 	//}
 }
 
-void drawCursor(){
+void draw() {
+	// missiles
+	playerMissiles.forEach([](Missile missile) {
+		DrawCircle(missile.target, 2, cBlue);
+		DrawLine(missile.origin, missile.pos, cBlue);
+	});
+	hostileMissiles.forEach([](Missile missile) {
+		DrawCircle(missile.target, 2, cRed);
+		DrawLine(missile.origin, missile.pos, cRed);
+	});
+
+
+	drawCursor();
+}
+
+void drawCursor() {
 	// cursor
 	Vector2f mousePos = Play::Input::GetMousePos();
 	Vector2f offsetX = { 2,0 };
@@ -84,18 +104,3 @@ void drawCursor(){
 	DrawRect(mousePos - offsetX, mousePos + offsetX, cCyan);
 	DrawRect(mousePos - offsetY, mousePos + offsetY, cCyan);
 }
-
-void draw() {
-	// missiles
-	PlayerMissiles.forEach([](Missile missile) {
-		DrawCircle(missile.target, 2, cBlue);
-	});
-	EnemyMissiles.forEach([](Missile missile) {
-		DrawLine(missile.origin, missile.pos, cRed);
-		DrawCircle(missile.target, 2, cRed);
-	});
-
-
-	drawCursor();
-}
-
