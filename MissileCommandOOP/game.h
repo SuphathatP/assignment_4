@@ -3,9 +3,7 @@
 #include "Play.h"
 #include "lib/LinkedList.h"
 
-
 using namespace Play;
-
 
 //struct SpriteObj {
 //	Vector2f pos;
@@ -19,6 +17,7 @@ struct Missile {
 	Vector2f pos;
 	Vector2f origin;
 	Vector2f target;
+	bool isHostile;
 
 	Missile(Vector2f origin, Vector2f target);
 };

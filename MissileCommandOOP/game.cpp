@@ -5,15 +5,27 @@ int SPRITE_CITY;
 int SPRITE_BASE;
 
 // added and removed all the time
-LinkedList<Missile> playerMissiles;
-LinkedList<Missile> hostileMissiles;
+//LinkedList<Missile> playerMissiles;
+LinkedList<Missile> missiles;
 
 // never changes size
 Vector2f building_pos[COUNT_BUILDINGS];
 char building_health[COUNT_BUILDINGS]; // range(char) = (-128, +127) and since max health is 100, we don't need more space
 int base_missile_count[COUNT_BASES];
 
-Missile::Missile(Vector2f origin, Vector2f target): pos(origin), origin(origin), target(target) {}
+Missile::Missile(Vector2f origin, Vector2f target)
+	: pos(origin), origin(origin), target(target)
+	, isHostile(origin.y - target.y > 0){}
+/* void explode(pos, int i) {
+*	spawn_explosion(pos);
+*	// missiles.remove(i); // could be buggy
+*	
+}
+
+void explode(pos) {
+*	spawn_explotion(pos);
+*	missiles.pop_front();
+} */
 
 void init() {
 	SPRITE_RUBBLE = Play::GetSpriteId("rubble");
@@ -49,18 +61,17 @@ void SpawnPlayerMissile(Vector2f target_pos) {
 			continue;
 
 		float dist = (building_pos[i] - target_pos).LengthSqr();
-		if(dist < best_dist_sqrd){
+		if(dist < best_dist_sqrd) {
 			best_dist_sqrd = dist;
 			best_index = i;
 		}
 	}
 	if (best_index == -1) return;
 
-	// pushing in front is generally faster for linked lists (depends on if they store the tail or not)
-	playerMissiles.push_front(Missile(building_pos[best_index], target_pos));
+	// pushing in front is (generally) faster for linked lists (depends on if they store the tail or not)
+	missiles.push_front(Missile(building_pos[best_index], target_pos));
 	base_missile_count[best_index]--;
 }
-
  
 void drawBuildings() {
 
@@ -77,13 +88,14 @@ void drawBuildings() {
 
 void draw() {
 	// missiles
-	playerMissiles.forEach([](Missile missile) {
-		DrawCircle(missile.target, 2, Play::cMagenta);
-		DrawLine(missile.origin, missile.pos, Play::cMagenta);
-	});
-	hostileMissiles.forEach([](Missile missile) {
-		DrawCircle(missile.target, 2, Play::cYellow);
-		DrawLine(missile.origin, missile.pos, Play::cYellow);
+	//playerMissiles.forEach([](Missile missile) {
+	//	DrawCircle(missile.target, 2, Play::cMagenta);
+	//	DrawLine(missile.origin, missile.pos, Play::cMagenta);
+	//});
+	missiles.forEach([](Missile missile) {
+		Colour color = (missile.isHostile) ? cMagenta : cYellow;
+		DrawCircle(missile.target, 2, color);
+		DrawLine(missile.origin, missile.pos, color);
 	});
 
 	drawBuildings();
