@@ -9,7 +9,9 @@ LinkedList<Missile> missiles;
 
 // never changes size
 Vector2f building_pos[COUNT_BUILDINGS];
-char building_health[COUNT_BUILDINGS]; // range(char) = (-128, +127) and since max health is 100, we don't need more space
+// range(char) = (-128, +127) and since max health is 100, we don't need more space
+// we could also just do dmg=1, base_health=2, city_heath=1
+char building_health[COUNT_BUILDINGS]; 
 int base_missile_count[COUNT_BASES];
 
 Missile::Missile(Vector2f origin, Vector2f target)
