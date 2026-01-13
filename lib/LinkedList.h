@@ -156,16 +156,6 @@ struct LinkedList {
 		return count;
 	}
 
-	void print() {
-		if (head == nullptr) return;
-
-		Node<T>* curr = head;
-		do {
-			std::cout << curr->data << "\n";
-			curr = curr->next;
-		} while (curr != nullptr);
-	}
-
 	void forEach(std::function<void(Node<T>*)> fn) {
 		Node<T>* curr = head;
 

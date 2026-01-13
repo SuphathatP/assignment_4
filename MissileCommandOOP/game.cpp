@@ -5,7 +5,6 @@ int SPRITE_CITY;
 int SPRITE_BASE;
 
 // added and removed all the time
-//LinkedList<Missile> playerMissiles;
 LinkedList<Missile> missiles;
 
 // never changes size
@@ -87,11 +86,6 @@ void drawBuildings() {
 }
 
 void draw() {
-	// missiles
-	//playerMissiles.forEach([](Missile missile) {
-	//	DrawCircle(missile.target, 2, Play::cMagenta);
-	//	DrawLine(missile.origin, missile.pos, Play::cMagenta);
-	//});
 	missiles.forEach([](Missile missile) {
 		Colour color = (missile.isHostile) ? cMagenta : cYellow;
 		DrawCircle(missile.target, 2, color);

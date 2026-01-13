@@ -5,14 +5,6 @@
 
 using namespace Play;
 
-//struct SpriteObj {
-//	Vector2f pos;
-//	int spriteId;
-//	SpriteObj(int spriteId, Vector2f pos)
-//		: spriteId(spriteId), pos(pos) {
-//	}
-//};
-
 struct Missile {
 	Vector2f pos;
 	Vector2f origin;
