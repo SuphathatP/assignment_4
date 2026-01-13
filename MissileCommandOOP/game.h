@@ -28,4 +28,4 @@ void drawCursor();
 void drawBuildings();
 
 void init();
-void setupBuildings();
+//void setupBuildings();
