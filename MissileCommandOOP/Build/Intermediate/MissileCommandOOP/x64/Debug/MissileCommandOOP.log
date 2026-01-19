@@ -1,4 +1,5 @@
 ﻿  GameState.cpp
-C:\Users\supphl-5-local\source\repos\data_oriented_design\assignment\assignment4\MissileCommandOOP\GameState.cpp(176,7): warning C4189: 'wasHostile': local variable is initialized but not referenced
-C:\Users\supphl-5-local\source\repos\data_oriented_design\assignment\assignment4\MissileCommandOOP\GameState.cpp(479,22): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  MainGame.cpp
+C:\Users\supphl-5-local\source\repos\data_oriented_design\assignment\assignment4\MissileCommandOOP\GameState.cpp(169,7): warning C4189: 'wasHostile': local variable is initialized but not referenced
+C:\Users\supphl-5-local\source\repos\data_oriented_design\assignment\assignment4\MissileCommandOOP\GameState.cpp(470,22): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
   MissileCommandOOP.vcxproj -> C:\Users\supphl-5-local\source\repos\data_oriented_design\assignment\assignment4\MissileCommandOOP\Build\x64\Debug\MissileCommandOOP.exe
