@@ -161,8 +161,8 @@ void GameState::SpawnExplosion(const Play::Point2D& pos)
 	explosion_pos.push_back(pos);
 	explosion_radius.push_back(0.0f);
 	explosion_maxRadius.push_back(EXPLOSION_MAX_RADIUS);
-	explosion_life.push_back(EXPLOSION_LIFE);
-	explosion_maxLife.push_back(EXPLOSION_LIFE);
+	explosion_life.push_back(EXPLOSION_MAX_LIFE);
+	explosion_maxLife.push_back(EXPLOSION_MAX_LIFE);
 
 	// Audio
 	Play::PlayAudio("Explosion");
