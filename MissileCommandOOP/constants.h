@@ -14,5 +14,13 @@ constexpr float BASE_RELOAD_TIME = 1.0f;
 
 constexpr int MISSILE_DAMAGE = 50;
 
-
+// Explosion
+constexpr float EXPLOSION_MAX_RADIUS = 10.0f;
+constexpr float EXPLOSION_MAX_RADIUS_SQRD = EXPLOSION_MAX_RADIUS * EXPLOSION_MAX_RADIUS;
+constexpr float EXPLOSION_MAX_LIFE = 0.8f;
 //constexpr int BASE_HEALTH = 100;
+
+// Score
+//constexpr int SCORE_CITY = 100;
+//constexpr int SCORE_BASE = 200;
+//constexpr int SCORE_MISSILE = 100;

@@ -15,10 +15,17 @@ struct Node {
 template <typename T>
 struct LinkedList {
 	Node<T>* head;
-	//Node<T>* tail;
+	Node<T>* tail;
 
 	LinkedList() {
-		head = nullptr;
+		head = tail = nullptr;
+	}
+
+	T inline front() {
+		return head->data;
+	}
+	T inline back() {
+		return tail->data;
 	}
 
 	void push_front(T item) {
@@ -31,15 +38,15 @@ struct LinkedList {
 		}
 	}
 
-	//void push_back(T item) {
-	//	Node<T>* new_end = new Node<T>(item);
-	//	if (this->_init_if_no_head(new_end)) {
-	//		/*head = tail = new_end;
-	//		return;*/
-	//		tail->next = new_end;
-	//		tail = new_end;
-	//	}
-	//}
+	void push_back(T item) {
+		Node<T>* new_end = new Node<T>(item);
+		if (this->_init_if_no_head(new_end)) {
+			/*head = tail = new_end;
+			return;*/
+			tail->next = new_end;
+			tail = new_end;
+		}
+	}
 #ifndef EXLUDE_RECURSIVE
 	template<typename ... _Types>
 	void push_front(T first, _Types... rest) {
@@ -48,12 +55,12 @@ struct LinkedList {
 		push_front(first);
 	};
 
-	//template<typename ... _Types>
-	//void push_back(T first, _Types... rest) {
+	template<typename ... _Types>
+	void push_back(T first, _Types... rest) {
 
-	//	push_back(first);
-	//	push_back(rest...);
-	//};
+		push_back(first);
+		push_back(rest...);
+	};
 
 	template<typename ... _Types>
 	LinkedList(_Types... items) {
@@ -105,6 +112,14 @@ struct LinkedList {
 		} while (curr != nullptr);
 
 		assert((void("index out of range"), false));
+	}
+
+	T pop_front() {
+		T ret = head->data;
+		Node<T>* _next = head->next;
+		delete head;
+		head = _next;
+		return ret;
 	}
 
 	void remove(unsigned int index) {
@@ -178,7 +193,7 @@ private:
 		if (head != nullptr)
 			return true;
 
-		head = ele;
+		head = tail = ele;
 		return false;
 	}
 };

@@ -15,7 +15,7 @@ void MainGameEntry( PLAY_IGNORE_COMMAND_LINE )
 {
 	Play::CreateManager( DISPLAY_WIDTH, DISPLAY_HEIGHT, DISPLAY_SCALE );
 
-	init();
+	Init();
 	//state.SetWorldSize(DISPLAY_WIDTH, DISPLAY_HEIGHT);
 	//state.NewGame();
 }
@@ -28,8 +28,8 @@ bool MainGameUpdate( float elapsedTime )
 	//state.Update(elapsedTime);
 	
 	// ground
-	DrawRect({ 0,0 }, { DISPLAY_WIDTH / 2, 16 }, cOrange, true);
-	DrawLine({ 0,16 }, { DISPLAY_WIDTH / 2, 16 }, cGreen);
+	DrawRect({ 0,0 }, { DISPLAY_WIDTH, 16 }, cYellow, true);
+	DrawLine({ 0,16 }, { DISPLAY_WIDTH, 16 }, cBlack);
 
 	drawCursor();
 	drawBuildings();

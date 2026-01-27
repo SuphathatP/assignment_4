@@ -1,44 +1,35 @@
 #include "game.h"
 
+Missile::Missile(Vector2f origin, Vector2f target)
+	: pos(origin), origin(origin), target(target)
+	, isHostile(origin.y - target.y > 0){}
+Explosion::Explosion() : radius(0.0f), life(EXPLOSION_MAX_LIFE) {}
+
 int SPRITE_RUBBLE;
 int SPRITE_CITY;
 int SPRITE_BASE;
 
+int score=0;
+
 // added and removed all the time
 LinkedList<Missile> missiles;
+LinkedList<Explosion> explosions;
 
 // never changes size
+
 Vector2f building_pos[COUNT_BUILDINGS];
 // range(char) = (-128, +127) and since max health is 100, we don't need more space
 // we could also just do dmg=1, base_health=2, city_heath=1
 char building_health[COUNT_BUILDINGS]; 
 int base_missile_count[COUNT_BASES];
 
-Missile::Missile(Vector2f origin, Vector2f target)
-	: pos(origin), origin(origin), target(target)
-	, isHostile(origin.y - target.y > 0){}
-/* void explode(pos, int i) {
-*	spawn_explosion(pos);
-*	// missiles.remove(i); // could be buggy
-*	
-}
-
-void explode(pos) {
-*	spawn_explotion(pos);
-*	missiles.pop_front();
-} */
-
-void init() {
-	SPRITE_RUBBLE = Play::GetSpriteId("rubble");
-	SPRITE_CITY = Play::GetSpriteId("city");
-	SPRITE_BASE = Play::GetSpriteId("missile_base");
-
+void ResetGame() {
 	//setup buildings
 	float offset = (float)DISPLAY_WIDTH / 7.0f;
 	for (size_t i = 0; i < COUNT_BASES; i++)
 	{
 		// base
-		building_pos[i] = Play::Point2D((offset * i * 2.0f) + offset * 1.4f, GROUND_Y);
+		building_pos[i] = Play::Vector2f(offset * (i * 2.0f + 1.4f), GROUND_Y);
 		building_health[i] = 100; // BASE_MAX_HEALTH
 		base_missile_count[i] = 10;
 	}
@@ -47,9 +38,17 @@ void init() {
 		//								(i-3) * offset + offset
 		//								offset * ((i - 3) + 1)
 		//								offset * (i - 2)
-		building_pos[i] = Play::Point2D(offset * (i - 2), GROUND_Y);
+		building_pos[i] = Play::Vector2f(offset * (i - 2), GROUND_Y);
 		building_health[i] = MISSILE_DAMAGE - 1; // one shot one kill
 	}
+}
+
+void Init() {
+	SPRITE_RUBBLE = Play::GetSpriteId("rubble");
+	SPRITE_CITY = Play::GetSpriteId("city");
+	SPRITE_BASE = Play::GetSpriteId("missile_base");
+
+	ResetGame();
 }
 
 void SpawnPlayerMissile(Vector2f target_pos) {
@@ -75,15 +74,13 @@ void SpawnPlayerMissile(Vector2f target_pos) {
 }
  
 void drawBuildings() {
-
-	for (int i = 0; i < 9; i++)
-	{
+	for (int i = 0; i < 9; i++){
 		if (building_health[i] < 0) {
 			DrawSprite(SPRITE_RUBBLE, building_pos[i], 0);
-			return;
+			continue;
 		}
 
-		DrawSprite((i < 3) ? SPRITE_BASE : SPRITE_CITY, building_pos[i], 0);
+		DrawSprite((i < COUNT_BASES) ? SPRITE_BASE : SPRITE_CITY, building_pos[i], 0);
 	}
 }
 
@@ -103,6 +100,35 @@ void drawCursor() {
 	Vector2f mousePos = Play::Input::GetMousePos();
 	Vector2f offsetX = { 2,0 };
 	Vector2f offsetY = { 0,2 };
-	DrawLine(mousePos - offsetX, mousePos + offsetX, cCyan);
-	DrawLine(mousePos - offsetY, mousePos + offsetY, cCyan);
+	DrawLine(mousePos - offsetX, mousePos + offsetX, cGreen);
+	DrawLine(mousePos - offsetY, mousePos + offsetY, cGreen);
+}
+
+void Update(float dt) {
+	// Play::PlayAudio("Explosion");
+	//Explosion curr = explosions.head->data;
+
+	{
+		Node<Explosion>* curr = explosions.head;
+		do {
+			explosions.pop_front();
+			curr = curr->next;
+		} while (curr->data.life < 0.0f);
+	}
+
+	explosions.forEach([&](Explosion expl) {
+		expl.life -= dt;
+		expl.radius = EXPLOSION_MAX_RADIUS * (1.0f - (expl.life / EXPLOSION_MAX_LIFE));
+		
+		for (char i = 0; i < COUNT_BUILDINGS; i++) {
+			if (building_health[i] <= 0) continue;
+			if ((building_pos[i] - expl.pos).LengthSqr() < EXPLOSION_MAX_RADIUS_SQRD) {
+				building_health[i] -= MISSILE_DAMAGE;
+				if (building_health[i] <= 0) {
+					//score -= SCORE_BASE;
+					Play::PlayAudio("Building");
+				}
+			}
+		}
+		});
 }
