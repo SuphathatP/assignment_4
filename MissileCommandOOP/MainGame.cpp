@@ -1,32 +1,37 @@
 #define PLAY_IMPLEMENTATION
 #include "Play.h"
 #include "constants.h"
-#include "GameStateManager.h"
+#include "GameState.h"
 
-GameStateManager state;
+// Use data-oriented state as the only runtime
+GameState state;
 
 // The entry point for a PlayBuffer program
-void MainGameEntry( PLAY_IGNORE_COMMAND_LINE )
+void MainGameEntry(PLAY_IGNORE_COMMAND_LINE)
 {
-	Play::CreateManager( DISPLAY_WIDTH, DISPLAY_HEIGHT, DISPLAY_SCALE );
-	
+	Play::CreateManager(DISPLAY_WIDTH, DISPLAY_HEIGHT, DISPLAY_SCALE);
+
 	state.SetWorldSize(DISPLAY_WIDTH, DISPLAY_HEIGHT);
 	state.NewGame();
+
+	// Audio
+	Play::PlayAudio("Start");
+	Play::StartAudioLoop("Music");
 }
 
 // Called by PlayBuffer every frame (60 times a second!)
-bool MainGameUpdate( float elapsedTime )
+bool MainGameUpdate(float elapsedTime)
 {
-	Play::ClearDrawingBuffer( Play::cBlack );
-	
+	Play::ClearDrawingBuffer(Play::cBlack);
+
 	state.Update(elapsedTime);
 
 	Play::PresentDrawingBuffer();
-	return Play::KeyDown( KEY_ESCAPE );
+	return Play::KeyDown(KEY_ESCAPE);
 }
 
 // Gets called once when the player quits the game 
-int MainGameExit( void )
+int MainGameExit(void)
 {
 	Play::DestroyManager();
 	return PLAY_OK;

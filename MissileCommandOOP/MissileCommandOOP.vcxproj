@@ -190,30 +190,16 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Destroyable.cpp" />
-    <ClCompile Include="Explosion.cpp" />
-    <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="GameStateManager.cpp" />
+    <ClCompile Include="GameState.cpp" />
     <ClCompile Include="MainGame.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="Missile.cpp" />
-    <ClCompile Include="MissileBase.cpp" />
-    <ClCompile Include="Reticle.cpp" />
-    <ClCompile Include="Structure.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Play.h" />
     <ClInclude Include="constants.h" />
-    <ClInclude Include="Destroyable.h" />
-    <ClInclude Include="Explosion.h" />
-    <ClInclude Include="GameObject.h" />
-    <ClInclude Include="GameStateManager.h" />
-    <ClInclude Include="Missile.h" />
-    <ClInclude Include="MissileBase.h" />
-    <ClInclude Include="Reticle.h" />
-    <ClInclude Include="Structure.h" />
+    <ClInclude Include="GameState.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
