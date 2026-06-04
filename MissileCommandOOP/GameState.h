@@ -8,7 +8,7 @@ public:
 	GameState();
 	~GameState();
 
-	void SetWorldSize(int width, int height);
+	//void SetWorldSize(int width, int height);
 	void NewGame();
 	void ClearGame();
 	void Update(float elapsedTime);
@@ -21,6 +21,7 @@ private:
 	std::vector<float> missile_distanceTravelled;
 	std::vector<float> missile_speed;
 	std::vector<Play::Colour> missile_color;
+	std::vector<bool> missile_isHostile;
 
 	// Explosions
 	std::vector<Play::Point2D> explosion_pos;
@@ -48,17 +49,20 @@ private:
 	float timeSinceLastHostileMissile;
 	float timeBetweenHostileMissiles;
 	float hostileMissileSpeed;
-	int worldWidth;
-	int worldHeight;
+	//int worldWidth;
+	//int worldHeight;
 
 	// Score
 	int score;
 
 	// System
 	void SpawnHostileMissile();
-	void SpawnMissile(Play::Point2D origin, Play::Point2D target, float speed, Play::Colour color);
-	void RemoveMissile(size_t index, bool awardScore = true);
+	void SpawnMissile(Play::Point2D origin, Play::Point2D target);
+	void RemoveMissile(size_t index);
 	void SpawnExplosion(const Play::Point2D& pos);
 	void RemoveExplosion(size_t index);
 	void FireFromClosestBase(const Play::Point2D& target);
+
+	int baseSpriteId;
+	int rubbleSpriteId;
 };

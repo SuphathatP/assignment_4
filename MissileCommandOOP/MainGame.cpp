@@ -11,7 +11,7 @@ void MainGameEntry(PLAY_IGNORE_COMMAND_LINE)
 {
 	Play::CreateManager(DISPLAY_WIDTH, DISPLAY_HEIGHT, DISPLAY_SCALE);
 
-	state.SetWorldSize(DISPLAY_WIDTH, DISPLAY_HEIGHT);
+	//state.SetWorldSize(DISPLAY_WIDTH, DISPLAY_HEIGHT);
 	state.NewGame();
 
 	// Audio

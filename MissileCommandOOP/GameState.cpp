@@ -10,15 +10,17 @@ GameState::~GameState()
 	ClearGame();
 }
 
-void GameState::SetWorldSize(int width, int height)
-{
-	worldWidth = width;
-	worldHeight = height;
-}
+//void GameState::SetWorldSize(int width, int height)
+//{
+//	DISPLAY_WIDTH = width;
+//	DISPLAY_HEIGHT = height;
+//}
 
 void GameState::NewGame()
 {
 	ClearGame();
+	baseSpriteId = Play::GetSpriteId("missile_base");
+	rubbleSpriteId = Play::GetSpriteId("rubble");
 
 	// Reset timing and difficulty
 	timeSinceLastHostileMissile = 0.0f;
@@ -34,7 +36,7 @@ void GameState::NewGame()
 	city_pos.clear();
 	city_alive.clear();
 	int numCities = 6;
-	int offset = worldWidth / (numCities + 1);
+	int offset = DISPLAY_WIDTH / (numCities + 1);
 	for (int i = 0; i < numCities; i++)
 	{
 		city_pos.push_back(Play::Point2D(float(i + 1) * offset, GROUND_LEVEL));
@@ -53,7 +55,7 @@ void GameState::NewGame()
 	int numBases = 3;
 	for (int i = 0; i < numBases; i++)
 	{
-		float offsetF = ((float)worldWidth / 7.0f);
+		float offsetF = ((float)DISPLAY_WIDTH / 7.0f);
 		base_pos.push_back(Play::Point2D((offsetF * i * 2.0f) + offsetF * 1.4f, GROUND_LEVEL));
 		base_maxMissiles.push_back(BASE_MAX_MISSILES); // BASE_MAX_MISSILES
 		base_missileCount.push_back(BASE_MAX_MISSILES); // BASE_MAX_MISSILES
@@ -70,6 +72,7 @@ void GameState::NewGame()
 	missile_distanceTravelled.reserve(64);
 	missile_speed.reserve(64);
 	missile_color.reserve(64);
+	missile_isHostile.reserve(64);
 
 	explosion_pos.reserve(32);
 	explosion_radius.reserve(32);
@@ -84,6 +87,7 @@ void GameState::NewGame()
 	missile_distanceTravelled.clear();
 	missile_speed.clear();
 	missile_color.clear();
+	missile_isHostile.clear();
 
 	explosion_pos.clear();
 	explosion_radius.clear();
@@ -98,6 +102,7 @@ void GameState::ClearGame()
 	missile_distanceTravelled.clear();
 	missile_speed.clear();
 	missile_color.clear();
+	missile_isHostile.clear();
 
 	explosion_pos.clear();
 	explosion_radius.clear();
@@ -117,8 +122,8 @@ void GameState::ClearGame()
 	timeSinceLastHostileMissile = 0.0f;
 	timeBetweenHostileMissiles = HOSTILE_SPAWN_INTERVAL_INIT;
 	hostileMissileSpeed = HOSTILE_MISSILE_SPEED_INIT;
-	worldWidth = DISPLAY_WIDTH;
-	worldHeight = DISPLAY_HEIGHT;
+	//DISPLAY_WIDTH = DISPLAY_WIDTH;
+	//DISPLAY_HEIGHT = DISPLAY_HEIGHT;
 	mouseFired = false;
 	score = 0;
 }
@@ -126,30 +131,28 @@ void GameState::ClearGame()
 // Spawn a single hostile missile with randomized origin and target
 void GameState::SpawnHostileMissile()
 {
-	Play::Point2D origin(Play::RandomRoll(worldWidth), (float)worldHeight);
-	Play::Point2D target((float)Play::RandomRoll(worldWidth), GROUND_LEVEL);
-	
-	// Passing speed and color for hostile missile
-	SpawnMissile(origin, target, hostileMissileSpeed, Play::cRed);
-	
+	Play::Point2D origin(Play::RandomRoll(DISPLAY_WIDTH), (float)DISPLAY_HEIGHT);
+	Play::Point2D target((float)Play::RandomRoll(DISPLAY_WIDTH), GROUND_LEVEL);
+
+	SpawnMissile(origin, target);
+
 }
 
-void GameState::SpawnMissile(Play::Point2D origin, Play::Point2D target, float speed, Play::Colour color)
+void GameState::SpawnMissile(Play::Point2D origin, Play::Point2D target)
 {
 	missile_origin.push_back(origin);
 	missile_target.push_back(target);
 	missile_pos.push_back(origin);
 	missile_distanceTravelled.push_back(0.0f);
 
-	// Store the speed and color provided
-	missile_speed.push_back(speed);
-	missile_color.push_back(color);
+	// Make hostile missile speed slightly varied for gameplay feel
+	float variation = ((Play::RandomRoll(100) / 100.0f) - 0.5f) * MISSILE_SPEED_VARIATION_SCALE;
+	missile_speed.push_back(hostileMissileSpeed + variation);
+	missile_color.push_back(Play::cRed);
+	missile_isHostile.push_back(true);
 
-	// Audio: decide by direction (hostile = from top to ground)
-	if (origin.y > target.y)
-		Play::PlayAudio("Enemies");
-	else
-		Play::PlayAudio("Missile");
+	// Audio
+	Play::PlayAudio("Enemies");
 }
 
 void GameState::SpawnExplosion(const Play::Point2D& pos)
@@ -162,10 +165,10 @@ void GameState::SpawnExplosion(const Play::Point2D& pos)
 	Play::PlayAudio("Explosion");
 }
 
-void GameState::RemoveMissile(size_t index, bool awardScore)
+void GameState::RemoveMissile(size_t index)
 {
-	// Determine if missile was hostile by checking its direction (origin.y > target.y which means hostile missile is coming down)
-	bool wasHostile = missile_origin[index].y > missile_target[index].y;
+	// Spawn explosion
+	bool wasHostile = missile_isHostile[index];
 
 	size_t last = missile_origin.size() - 1;
 	if (index != last)
@@ -176,6 +179,7 @@ void GameState::RemoveMissile(size_t index, bool awardScore)
 		missile_distanceTravelled[index] = missile_distanceTravelled[last];
 		missile_speed[index] = missile_speed[last];
 		missile_color[index] = missile_color[last];
+		missile_isHostile[index] = missile_isHostile[last];
 	}
 	missile_origin.pop_back();
 	missile_target.pop_back();
@@ -183,10 +187,7 @@ void GameState::RemoveMissile(size_t index, bool awardScore)
 	missile_distanceTravelled.pop_back();
 	missile_speed.pop_back();
 	missile_color.pop_back();
-
-	// If hostile was destroyed and awardScore is true, award score
-	if (wasHostile && awardScore)
-		score += SCORE_MISSILE;
+	missile_isHostile.pop_back();
 }
 
 void GameState::RemoveExplosion(size_t index)
@@ -206,7 +207,7 @@ void GameState::RemoveExplosion(size_t index)
 void GameState::FireFromClosestBase(const Play::Point2D& target)
 {
 	// Find closest alive base with missiles
-	int bestIndex = - 1;
+	int bestIndex = -1;
 	float bestDistance = 1e9f;
 	for (size_t i = 0; i < base_pos.size(); i++)
 	{
@@ -219,12 +220,21 @@ void GameState::FireFromClosestBase(const Play::Point2D& target)
 			bestIndex = (int)i;
 		}
 	}
-	if (bestIndex == - 1) return;
+	if (bestIndex == -1) return;
 
 	// Spawn a player missile from base to target
-	SpawnMissile(base_pos[bestIndex], target, base_missileSpeed[bestIndex], Play::cBlue);
+	missile_origin.push_back(base_pos[bestIndex]);
+	missile_target.push_back(target);
+	missile_pos.push_back(base_pos[bestIndex]);
+	missile_distanceTravelled.push_back(0.0f);
+	missile_speed.push_back(base_missileSpeed[bestIndex]);
+	missile_color.push_back(Play::cBlue);
+	missile_isHostile.push_back(false);
 
 	base_missileCount[bestIndex] -= 1;
+
+	// Audio
+	Play::PlayAudio("Missile");
 }
 
 void GameState::Update(float elapsedTime)
@@ -291,8 +301,7 @@ void GameState::Update(float elapsedTime)
 		if (missile_distanceTravelled[i] >= totalDistance)
 		{
 			SpawnExplosion(missile_pos[i]);
-			// Not award score if missile reached its target and not hitting base
-			RemoveMissile(i, false);
+			RemoveMissile(i);
 		}
 		else
 		{
@@ -349,15 +358,13 @@ void GameState::Update(float elapsedTime)
 			// Award points for destroying hostile missiles
 			for (size_t m = 0; m < missile_origin.size(); )
 			{
-				// Check direction to determine if missile is hostile: hostile missiles travel direction is down (origin.y > target.y)
-				bool isHostile = missile_origin[m].y > missile_target[m].y;
-				if (!isHostile) { m++; continue; }
+				if (!missile_isHostile[m]) { m++; continue; }
 				float distance = (missile_pos[m] - explosion_pos[i]).Length();
 				if (distance <= EXPLOSION_MAX_RADIUS)
 				{
 					// Destroy missile and award score
-					RemoveMissile(m, true);
-					// Note: RemoveMissile now award SCORE_MISSILE only when awardScore is true
+					RemoveMissile(m);
+					score += SCORE_MISSILE;
 				}
 				else { m++; }
 			}
@@ -375,7 +382,7 @@ void GameState::Update(float elapsedTime)
 
 	// Drawing
 	// Draw ground
-	Play::DrawRect(Play::Point2D(0, 0), Play::Point2D((float)worldWidth, GROUND_LEVEL), Play::cYellow, true);
+	Play::DrawRect(Play::Point2D(0, 0), Play::Point2D((float)DISPLAY_WIDTH, GROUND_LEVEL), Play::cYellow, true);
 
 	// Draw cities
 	for (size_t c = 0; c < city_pos.size(); c++)
@@ -386,7 +393,7 @@ void GameState::Update(float elapsedTime)
 		}
 		else
 		{
-			int spriteId = Play::GetSpriteId("rubble");
+			int spriteId = rubbleSpriteId;
 			if (spriteId >= 0)
 			{
 				Play::DrawSprite(spriteId, city_pos[c], 0);
@@ -400,8 +407,8 @@ void GameState::Update(float elapsedTime)
 	}
 
 	// Draw bases
-	int baseSpriteId = Play::GetSpriteId("missile_base");
-	int rubbleSpriteId = Play::GetSpriteId("rubble");
+	//int baseSpriteId = Play::GetSpriteId("missile_base");
+	//int rubbleSpriteId = Play::GetSpriteId("rubble");
 	for (size_t b = 0; b < base_pos.size(); b++)
 	{
 		if (!base_alive[b])
@@ -440,7 +447,7 @@ void GameState::Update(float elapsedTime)
 			Play::DrawRect(base_pos[b] - Play::Point2D(6, 0), base_pos[b] + Play::Point2D(6, 10), Play::cWhite, true);
 
 			// Draw missile count
-			Play::DrawDebugText(base_pos[b] + Play::Vector2f(6, - 8), std::to_string(base_missileCount[b]).c_str(), Play::cBlack);
+			Play::DrawDebugText(base_pos[b] + Play::Vector2f(6, -8), std::to_string(base_missileCount[b]).c_str(), Play::cBlack);
 
 			// Draw base health (Safeguard)
 			/* std::string healthText = std::string("HP:") + std::to_string(base_health[b]);
@@ -462,7 +469,7 @@ void GameState::Update(float elapsedTime)
 	// Draw explosions
 	for (size_t i = 0; i < explosion_pos.size(); i++)
 	{
-		int alternateColour(i);
+		//int alternateColour = i;
 		const Play::Colour colours[5] = {
 		Play::cWhite,
 		Play::cGrey,
@@ -471,11 +478,11 @@ void GameState::Update(float elapsedTime)
 		Play::cRed
 		};
 
-		alternateColour = alternateColour + 1 % 10;
-		int colourIndex = alternateColour / 2;
+		//alternateColour = alternateColour + 1 % 10;
+		//int colourIndex = alternateColour / 2;
 
 
-		Play::DrawCircle(explosion_pos[i], (int)explosion_radius[i], colours[colourIndex]);
+		Play::DrawCircle(explosion_pos[i], (int)explosion_radius[i], colours[(int)explosion_radius[i] / 2 % 5]);
 	}
 
 	// Draw reticle
@@ -484,5 +491,5 @@ void GameState::Update(float elapsedTime)
 
 	// HUD 
 	// Draw score
-	Play::DrawDebugText(Play::Point2D(22, (float)worldHeight - 127), std::to_string(score).c_str(), Play::cBlack);
+	Play::DrawDebugText(Play::Point2D(22, 8), std::to_string(score).c_str(), Play::cBlack);
 }

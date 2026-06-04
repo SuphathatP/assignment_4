@@ -27,6 +27,6 @@ constexpr float EXPLOSION_MAX_RADIUS = 10.0f;
 constexpr float EXPLOSION_MAX_LIFE = 0.8f;
 
 // Score
-constexpr int SCORE_CITY = 200;
-constexpr int SCORE_MISSILE = 100;
+constexpr int SCORE_CITY = 100;
 constexpr int SCORE_BASE = 200;
+constexpr int SCORE_MISSILE = 100;
